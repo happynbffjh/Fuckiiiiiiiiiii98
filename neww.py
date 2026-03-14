@@ -312,12 +312,14 @@ def step1_add_to_cart(session):
     
     return None, None, None
 
-# Get session token from page
-stk_match = re.search(r'name="serialized-sessionToken" content="&quot;([^&]+)&quot;', response.text)
-if stk_match:
-    stk = stk_match.group(1)
-    print("Session Token:", stk)
-else:
+def extract_session_token(response_text):
+    if not response_text:
+        return None
+    stk_match = re.search(r'name="serialized-sessionToken" content="&quot;([^&]+)&quot;', response_text)
+    if stk_match:
+        stk = stk_match.group(1)
+        print("Session Token:", stk)
+        return stk
     print("Session token not found")
     return None
 
