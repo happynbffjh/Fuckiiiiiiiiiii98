@@ -312,20 +312,13 @@ def step1_add_to_cart(session):
     
     return None, None, None
 
-def extract_session_token(html):
-    from html import unescape
-    
-    meta_pattern = r'<meta\s+name="serialized-session-token"\s+content="([^"]+)"'
-    meta_match = re.search(meta_pattern, html)
-    
-    if meta_match:
-        content = unescape(meta_match.group(1))
-        token = content.strip('"')
-        if len(token) > 50:
-            print(f"  [OK] Session token extracted")
-            return token
-    
-    print("  [WARNING] Session token not found")
+# Get session token from page
+stk_match = re.search(r'name="serialized-sessionToken" content="&quot;([^&]+)&quot;', response.text)
+if stk_match:
+    stk = stk_match.group(1)
+    print("Session Token:", stk)
+else:
+    print("Session token not found")
     return None
 
 def step2_tokenize_card(session, checkout_token):
